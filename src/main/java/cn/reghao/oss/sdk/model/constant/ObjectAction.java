@@ -1,4 +1,4 @@
-package cn.reghao.oss.sdk.model;
+package cn.reghao.oss.sdk.model.constant;
 
 import java.util.HashMap;
 import java.util.Map;
