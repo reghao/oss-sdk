@@ -23,6 +23,8 @@ public class UploadPrepare implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @NotNull
+    private Integer userNodeId;
+    @NotNull
     private int channelCode;
     @NotBlank
     private String filename;
