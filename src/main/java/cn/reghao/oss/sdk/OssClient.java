@@ -85,11 +85,11 @@ public class OssClient {
         this.sk = sk;
     }
 
-    public UploadPrepareRet prepareUpload(String clientSha256sum, int userNodeId, int channelCode, Path filePath) throws Exception {
+    public UploadPrepareRet prepareUpload(String clientSha256sum, int bucketId, int channelCode, Path filePath) throws Exception {
         // 1. 计算 SHA-256 (用于后端秒传校验)
         String filename0 = filePath.getFileName().toString();
         long size = filePath.toFile().length();
-        UploadPrepare uploadPrepare = new UploadPrepare(userNodeId, channelCode, filename0, size, clientSha256sum);
+        UploadPrepare uploadPrepare = new UploadPrepare(bucketId, channelCode, filename0, size, clientSha256sum);
         return prepareUpload(uploadPrepare);
     }
 
@@ -161,7 +161,7 @@ public class OssClient {
 
     public ServerInfo getServerInfo(UploadRequestDto uploadRequestDto) throws Exception {
         Map<String, Object> body = Map.of(
-                "userNodeId", uploadRequestDto.getUserNodeId(),
+                "bucketId", uploadRequestDto.getBucketId(),
                 "channelCode", uploadRequestDto.getChannelCode()
         );
         String jsonBody = JsonConverter.objectToJson(body);
@@ -240,9 +240,9 @@ public class OssClient {
         }
     }
 
-    public UploadFileRet uploadFilePart(int userNodeId, int channelCode, String uploadUrl, String token, Path filePath) throws Exception {
+    public UploadFileRet uploadFilePart(int bucketId, int channelCode, String uploadUrl, String token, Path filePath) throws Exception {
         String clientSha256sum = OssSamplingHash.calculateFullHash(filePath);
-        UploadPrepareRet uploadPrepareRet = prepareUpload(clientSha256sum, userNodeId, channelCode, filePath);
+        UploadPrepareRet uploadPrepareRet = prepareUpload(clientSha256sum, bucketId, channelCode, filePath);
         if (uploadPrepareRet == null) {
             return null;
         }

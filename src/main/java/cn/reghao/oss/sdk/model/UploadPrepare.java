@@ -23,7 +23,7 @@ public class UploadPrepare implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @NotNull
-    private Integer userNodeId;
+    private Integer bucketId;
     @NotNull
     private int channelCode;
     @NotBlank

@@ -16,7 +16,7 @@ import lombok.Setter;
 @Getter
 public class UploadRequestDto {
     @NotNull
-    private int userNodeId;
+    private int bucketId;
     @NotNull
     private int channelCode;
 }
