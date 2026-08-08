@@ -15,6 +15,7 @@ public class ServerInfo implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private String ossUrl;
+    private int bucketId;
     private int channelCode;
     private long maxSize;
     private String token;
