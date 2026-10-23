@@ -160,11 +160,7 @@ public class OssClient {
     }
 
     public ServerInfo getServerInfo(UploadRequestDto uploadRequestDto) throws Exception {
-        Map<String, Object> body = Map.of(
-                "bucketId", uploadRequestDto.getBucketId(),
-                "channelCode", uploadRequestDto.getChannelCode()
-        );
-        String jsonBody = JsonConverter.objectToJson(body);
+        String jsonBody = JsonConverter.objectToJson(uploadRequestDto);
 
         String api = "/api/oss/sdk/upload_request";
         String url = String.format("%s%s", endpoint, api);
@@ -548,7 +544,7 @@ public class OssClient {
         Map<String, Object> body = Map.of(
                 "objectId", objectId,
                 "scope", scope
-                );
+        );
         String jsonBody = JsonConverter.objectToJson(body);
         String api = "/api/oss/sdk/object/scope";
         try {
@@ -567,7 +563,7 @@ public class OssClient {
         Map<String, Object> body = Map.of(
                 "idType", idType,
                 "id", id
-                );
+        );
         String jsonBody = JsonConverter.objectToJson(body);
 
         String api = "/api/oss/sdk/object/delete";
@@ -625,7 +621,7 @@ public class OssClient {
             throw new RuntimeException(e);
         }
     }
-    
+
     public VideoInfo getVideoInfo(String objectId) {
         String api = "/api/oss/sdk/object/get/video";
         String queryString = "objectId=" + objectId;

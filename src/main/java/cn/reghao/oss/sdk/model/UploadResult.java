@@ -24,7 +24,7 @@ public class UploadResult implements Serializable {
     private String channelPrefix;
     private String objectId;
     private String objectName;
-    private int uploadBy;
+    private int bucketId;
     private String host;
     private int port;
     private int uploadStatus;

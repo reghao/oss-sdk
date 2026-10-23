@@ -15,8 +15,8 @@ import lombok.Setter;
 @Setter
 @Getter
 public class UploadRequestDto {
-    @NotNull
-    private int bucketId;
-    @NotNull
-    private int channelCode;
+    @NotNull(message = "bucketId 不能为 null")
+    private Integer bucketId;
+    @NotNull(message = "channelCode 不能为 null")
+    private Integer channelCode;
 }

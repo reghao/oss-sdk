@@ -23,7 +23,7 @@ public class FastUploadResult implements Serializable {
     private String objectId;
     private String objectName;
     private String channelPrefix;
-    private int uploadBy;
+    private int bucketId;
 
     public FastUploadResult(UploadResult uploadResult) {
         this.sha256sum = uploadResult.getSha256sum();
@@ -31,6 +31,6 @@ public class FastUploadResult implements Serializable {
         this.objectId = uploadResult.getObjectId();
         this.objectName = uploadResult.getObjectName();
         this.channelPrefix = uploadResult.getChannelPrefix();
-        this.uploadBy = uploadResult.getUploadBy();
+        this.bucketId = uploadResult.getBucketId();
     }
 }

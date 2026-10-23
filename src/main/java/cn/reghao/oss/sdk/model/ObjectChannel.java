@@ -14,13 +14,11 @@ import java.io.Serializable;
 public class ObjectChannel implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private int id;
+    private int channelId;
     private int channelCode;
     private String prefix;
     private long maxSize;
     private int fileType;
-    private boolean setUrl;
-    private boolean setCallback;
     private int scope;
     private String domain;
     private int createBy;

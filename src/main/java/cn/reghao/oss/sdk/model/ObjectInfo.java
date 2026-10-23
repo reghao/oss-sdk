@@ -21,6 +21,7 @@ public class ObjectInfo implements Serializable {
     private int fileType;
     private String filename;
     private long size;
+    private String sizeStr;
     private String url;
     private int scope;
     private String sha256sum;
