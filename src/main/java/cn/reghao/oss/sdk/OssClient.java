@@ -109,16 +109,21 @@ public class OssClient {
                 .POST(HttpRequest.BodyPublishers.ofString(jsonBody))
                 .build();
         HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-        if (response.statusCode() != 200) {
-            String errorMsg = String.format("上传失败，状态码: %s", response.statusCode());
-            throw new RuntimeException(errorMsg);
+        String errorMsg = "";
+        if (response.statusCode() == 200) {
+            String body = response.body();
+            Type type = new TypeToken<WebResult<UploadPrepareRet>>(){}.getType();
+            WebResult<UploadPrepareRet> webResult = JsonConverter.jsonToObject(body, type);
+            if (webResult.getCode() == 0) {
+                return webResult.getData();
+            } else {
+                errorMsg = webResult.getMsg();
+            }
+        } else {
+            errorMsg = String.format("上传失败，状态码: %s", response.statusCode());
         }
 
-        String body = response.body();
-        Type type = new TypeToken<WebResult<UploadPrepareRet>>(){}.getType();
-        WebResult<UploadPrepareRet> webResult = JsonConverter.jsonToObject(body, type);
-        UploadPrepareRet uploadPrepareRet = webResult.getData();
-        return uploadPrepareRet;
+        throw new RuntimeException(errorMsg);
     }
 
     public UploadFileRet checkSample(Path filePath, UploadPrepareRet uploadPrepareRet) throws Exception {
@@ -147,16 +152,21 @@ public class OssClient {
                 .build();
 
         HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-        if (response.statusCode() != 200) {
-            String errorMsg = String.format("上传失败，状态码: %s", response.statusCode());
-            throw new RuntimeException(errorMsg);
+        String errorMsg = "";
+        if (response.statusCode() == 200) {
+            String body = response.body();
+            Type type1 = new TypeToken<WebResult<UploadFileRet>>(){}.getType();
+            WebResult<UploadFileRet> webResult1 = JsonConverter.jsonToObject(body, type1);
+            if (webResult1.getCode() == 0) {
+                return webResult1.getData();
+            } else {
+                errorMsg =  webResult1.getMsg();
+            }
+        } else {
+            errorMsg = String.format("上传失败，状态码: %s", response.statusCode());
         }
 
-        String body = response.body();
-        Type type1 = new TypeToken<WebResult<UploadFileRet>>(){}.getType();
-        WebResult<UploadFileRet> webResult1 = JsonConverter.jsonToObject(body, type1);
-        UploadFileRet uploadFileRet = webResult1.getData();
-        return uploadFileRet;
+        throw new RuntimeException(errorMsg);
     }
 
     public ServerInfo getServerInfo(UploadRequestDto uploadRequestDto) throws Exception {
@@ -175,14 +185,20 @@ public class OssClient {
                 .POST(HttpRequest.BodyPublishers.ofString(jsonBody))
                 .build();
         HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+        String errorMsg = "";
         if (response.statusCode() == 200) {
             String retBody = response.body();
             Type type = new TypeToken<WebResult<ServerInfo>>(){}.getType();
             WebResult<ServerInfo> webResult = JsonConverter.jsonToObject(retBody, type);
-            return webResult.getData();
+            if (webResult.getCode() == 0) {
+                return webResult.getData();
+            } else {
+                errorMsg = webResult.getMsg();
+            }
         } else {
-            throw new RuntimeException("获取上传凭证失败: " + response.statusCode());
+            errorMsg = "获取上传凭证失败: " + response.statusCode();
         }
+        throw new RuntimeException(errorMsg);
     }
 
     private String getPostResponseBody(String api, String jsonBody) throws Exception {
@@ -335,6 +351,7 @@ public class OssClient {
                 .build();
 
         HttpResponse<String> httpResponse = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
+        String errorMsg = "";
         int statusCode = httpResponse.statusCode();
         if (statusCode == 200) {
             String body = httpResponse.body();
@@ -342,9 +359,14 @@ public class OssClient {
             WebResult<UploadFileRet> webResult = JsonConverter.jsonToObject(body, type);
             if (webResult.getCode() == 0 ) {
                 return webResult.getData();
+            } else {
+                errorMsg = webResult.getMsg();
             }
+        } else {
+            errorMsg = String.format("上传失败，状态码: %s", httpResponse.statusCode());
         }
-        return null;
+
+        throw new RuntimeException(errorMsg);
     }
 
     public String getSignedUrl(String objectId, String action, String objectUrl) throws Exception {
@@ -370,19 +392,21 @@ public class OssClient {
 
         // 发送请求并获取响应
         HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-        if (response.statusCode() != 200) {
-            String errorMsg = String.format("Error: %s", response.statusCode());
-            throw new RuntimeException(errorMsg);
+        String errorMsg = "";
+        if (response.statusCode() == 200) {
+            String body = response.body();
+            Type type = new TypeToken<WebResult<String>>(){}.getType();
+            WebResult<String> webResult = JsonConverter.jsonToObject(body, type);
+            if (webResult.getCode() == 0) {
+                return webResult.getData();
+            } else {
+                errorMsg = webResult.getMsg();
+            }
+        } else {
+            errorMsg = String.format("Error: %s", response.statusCode());
         }
 
-        String body = response.body();
-        Type type = new TypeToken<WebResult<String>>(){}.getType();
-        WebResult<String> webResult = JsonConverter.jsonToObject(body, type);
-        if (webResult.getCode() == 0) {
-            return webResult.getData();
-        }
-
-        return null;
+        throw new RuntimeException(errorMsg);
     }
 
     private String getGetResponseBody(String api, String queryString) throws Exception {
@@ -459,6 +483,7 @@ public class OssClient {
                 .build();
 
         HttpResponse<String> httpResponse = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
+        String errorMsg = "";
         int statusCode = httpResponse.statusCode();
         if (statusCode == 200) {
             String body = httpResponse.body();
@@ -466,9 +491,14 @@ public class OssClient {
             WebResult<UploadFileRet> webResult = JsonConverter.jsonToObject(body, type);
             if (webResult.getCode() == 0 ) {
                 return webResult.getData();
+            } else {
+                errorMsg =  webResult.getMsg();
             }
+        } else {
+            errorMsg = String.format("上传文件失败: %s", httpResponse.statusCode());
         }
-        return null;
+
+        throw new RuntimeException(errorMsg);
     }
 
     public UploadFileRet putObject(ServerInfo serverInfo, File file) throws Exception {
@@ -503,21 +533,27 @@ public class OssClient {
             }
 
             errorMsg = webResult.getMsg();
+        } else {
+            errorMsg = String.format("上传文件失败: %s", httpResponse.statusCode());
         }
-        throw new RuntimeException(String.format("statusCode: %s, errorMsg: %s", statusCode, errorMsg));
+
+        throw new RuntimeException(errorMsg);
     }
 
     public ObjectChannel getChannel(int channelCode) {
         String api = "/api/oss/sdk/channel";
         String queryString = "channelCode=" + channelCode;
+        String errorMsg = "";
         try {
             String body = getGetResponseBody(api, queryString);
             Type type = new TypeToken<WebResult<ObjectChannel>>(){}.getType();
             WebResult<ObjectChannel> webResult = JsonConverter.jsonToObject(body, type);
             if (webResult.getCode() == 0) {
                 return webResult.getData();
+            } else {
+                errorMsg =  webResult.getMsg();
             }
-            throw new RuntimeException(webResult.getMsg());
+            throw new RuntimeException(errorMsg);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -587,7 +623,7 @@ public class OssClient {
                 throw new RuntimeException(webResult.getMsg());
             }
         } else {
-            throw new RuntimeException("获取上传凭证失败: " + response.statusCode());
+            throw new RuntimeException("删除对象失败: " + response.statusCode());
         }
     }
 
